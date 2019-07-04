@@ -131,8 +131,8 @@ public class User implements UserDetails {
     @JsonIgnore
     private Collection<Authority> authorities;
 
-    @OneToMany(fetch = FetchType.LAZY)
+   /* @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnore
-    private Collection<ResetPassword> passwordReset;
+    private Collection<ResetPassword> passwordReset;*/
 }

@@ -15,6 +15,7 @@ import com.spring.demo.model.response.ResetPasswordResponse;
 import com.spring.demo.repository.*;
 import converter.RoomEntityToReservationResponseConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -132,17 +136,17 @@ public class ReservationResource {
 
         try {
 
-            Optional<User> user = userRepository.findByUserName(resetPasswordRequest.getEmail());
-            if(!user.isPresent()){
+            User user = userRepository.findByUserName(resetPasswordRequest.getEmail());
+            if(user == null){
 
-                throw new NoSuchElementException("username not found in our records!!!");
+                throw new UsernameNotFoundException(resetPasswordRequest.getEmail());
             }
             LocalDate sourceDate = LocalDate.now();
             LocalDate expireDate = sourceDate.plusDays(1);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String expire = expireDate.format(formatter);
-            Date expireD = new SimpleDateFormat("yyyy-mm-dd").parse(expire);
-            ResetPassword resetPassword1 = new ResetPassword(UUID.randomUUID().toString(), expireD, user.get());
+            Date expireD = new SimpleDateFormat("yyyy-MM-dd").parse(expire);
+            ResetPassword resetPassword1 = new ResetPassword(UUID.randomUUID().toString(), expireD, user);
             resetPasswordRepository.save(resetPassword1);
             ResetPasswordResponse response = conversionService.convert(resetPassword1, ResetPasswordResponse.class);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -167,13 +171,13 @@ public class ReservationResource {
             Optional<User> user = userRepository.findById(resetRequest.getUserId());
             if(!user.isPresent()){
 
-                throw new NoSuchElementException("Invalid user id,user not found");
+                throw new RestServiceException("Invalid user id,user not found");
             }
             User userToUpdate = user.get();
-            Optional<ResetPassword> resetData = resetPasswordRepository.findByUserId(userToUpdate);
+            Optional<ResetPassword> resetData = resetPasswordRepository.findById(resetRequest.getId());
             if(!resetData.isPresent()){
 
-                throw new NoSuchElementException("Not a valid request");
+                throw new RestServiceException("Not a valid request");
             }
             if(!resetData.get().getToken().equals(resetRequest.getToken())){
 
@@ -183,7 +187,9 @@ public class ReservationResource {
 
                 throw new RestServiceException("reset token expired");
             }
-            userToUpdate.setPassword(resetRequest.getPassword());
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
+            String encodedPassword = encoder.encode(resetRequest.getPassword());
+            userToUpdate.setPassword(encodedPassword);
             userRepository.save(userToUpdate);
             PasswordResettedResponse resettedResponse = new PasswordResettedResponse();
             resettedResponse.setMessage("Password reset successfully!!!");

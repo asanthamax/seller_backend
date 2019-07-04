@@ -14,7 +14,8 @@ public class ResetPassword {
     }
 
     @Column(name = "id")
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
 
     @Column(name = "token")

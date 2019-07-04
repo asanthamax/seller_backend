@@ -14,5 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT DISTINCT user FROM User user " +
             "INNER JOIN FETCH user.authorities AS authorities " +
             "WHERE user.username = :username")
-    Optional<User> findByUserName(@Param("username") String username);
+    User findByUserName(@Param("username") String username);
 }

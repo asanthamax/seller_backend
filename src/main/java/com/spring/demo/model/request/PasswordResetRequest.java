@@ -10,6 +10,8 @@ public class PasswordResetRequest {
 
     private String token;
 
+    private Long Id;
+
     public String getToken() {
         return token;
     }
@@ -34,6 +36,14 @@ public class PasswordResetRequest {
         this.confirmPassword = confirmPassword;
     }
 
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
     public Long getUserId() {
         return userId;
     }
@@ -46,11 +56,12 @@ public class PasswordResetRequest {
 
     }
 
-    public PasswordResetRequest(String password, String confirmPassword, Long userId, String token) {
+    public PasswordResetRequest(String password, String confirmPassword, Long userId, String token, Long id) {
 
         this.password = password;
         this.confirmPassword = confirmPassword;
         this.userId = userId;
         this.token = token;
+        this.Id = id;
     }
 }

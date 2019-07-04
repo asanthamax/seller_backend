@@ -13,6 +13,7 @@ public class ResetPasswordEntityToResetPasswordResponse implements Converter<Res
         ResetPasswordResponse resetPasswordResponse = new ResetPasswordResponse();
         resetPasswordResponse.setId(resetPassword.getId());
         resetPasswordResponse.setToken(resetPassword.getToken());
+        resetPasswordResponse.setUserId(resetPassword.getUser().getId());
         return resetPasswordResponse;
     }
 }
