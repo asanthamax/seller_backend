@@ -23,6 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -114,26 +115,6 @@ public class ReservationResource {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-   /* @RequestMapping(path = "/reset_password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ResetPasswordResponse> resetPassword(
 
-            @RequestBody
-            ResetPasswordRequest resetPasswordRequest
-    ){
-
-        ResetPassword resetPassword = conversionService.convert(resetPasswordRequest, ResetPassword.class);
-        resetPasswordRepository.save(resetPassword);
-
-        User user = userRepository.findByUserName(resetPasswordRequest.getEmail());
-        Optional<ResetPassword> resetPass = resetPasswordRepository.findByUserId(user);
-        ResetPassword resetPassword1 = new ResetPassword(UUID.randomUUID(), );
-        ResetPasswordResponse response = null;
-        if(resetPass.isPresent()){
-
-            ResetPassword resetPassword1 = resetPass.get();
-            resetPasswordRepository.save(resetPassword1);
-
-        }
-    }*/
 
 }
