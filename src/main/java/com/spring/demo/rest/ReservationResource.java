@@ -4,8 +4,11 @@ import com.spring.demo.entity.ReservationEntity;
 import com.spring.demo.entity.ResetPassword;
 import com.spring.demo.entity.RoomEntity;
 import com.spring.demo.entity.User;
+import com.spring.demo.errors.RestServiceException;
+import com.spring.demo.model.request.PasswordResetRequest;
 import com.spring.demo.model.request.ReservationRequest;
 import com.spring.demo.model.request.ResetPasswordRequest;
+import com.spring.demo.model.response.PasswordResettedResponse;
 import com.spring.demo.model.response.ReservationResponse;
 import com.spring.demo.model.response.ReserveResponse;
 import com.spring.demo.model.response.ResetPasswordResponse;
@@ -13,6 +16,7 @@ import com.spring.demo.repository.*;
 import converter.RoomEntityToReservationResponseConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,7 +26,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -114,26 +123,79 @@ public class ReservationResource {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-   /* @RequestMapping(path = "/reset_password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/forget_password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<ResetPasswordResponse> resetPassword(
 
             @RequestBody
             ResetPasswordRequest resetPasswordRequest
     ){
 
-        ResetPassword resetPassword = conversionService.convert(resetPasswordRequest, ResetPassword.class);
-        resetPasswordRepository.save(resetPassword);
+        try {
 
-        User user = userRepository.findByUserName(resetPasswordRequest.getEmail());
-        Optional<ResetPassword> resetPass = resetPasswordRepository.findByUserId(user);
-        ResetPassword resetPassword1 = new ResetPassword(UUID.randomUUID(), );
-        ResetPasswordResponse response = null;
-        if(resetPass.isPresent()){
+            Optional<User> user = userRepository.findByUserName(resetPasswordRequest.getEmail());
+            if(!user.isPresent()){
 
-            ResetPassword resetPassword1 = resetPass.get();
+                throw new NoSuchElementException("username not found in our records!!!");
+            }
+            LocalDate sourceDate = LocalDate.now();
+            LocalDate expireDate = sourceDate.plusDays(1);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String expire = expireDate.format(formatter);
+            Date expireD = new SimpleDateFormat("yyyy-mm-dd").parse(expire);
+            ResetPassword resetPassword1 = new ResetPassword(UUID.randomUUID().toString(), expireD, user.get());
             resetPasswordRepository.save(resetPassword1);
+            ResetPasswordResponse response = conversionService.convert(resetPassword1, ResetPasswordResponse.class);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        }catch(DataAccessException ex){
 
+            throw new RestServiceException(ex);
+        } catch (ParseException e) {
+
+            throw new RestServiceException("Server Error Occurred");
         }
-    }*/
+    }
 
+    @RequestMapping(path = "/reset_password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<PasswordResettedResponse> updatePassword(@RequestBody PasswordResetRequest resetRequest){
+
+        try{
+
+            if(!resetRequest.getPassword().equals(resetRequest.getConfirmPassword())){
+
+                throw new RestServiceException("Passwords not matched");
+            }
+            Optional<User> user = userRepository.findById(resetRequest.getUserId());
+            if(!user.isPresent()){
+
+                throw new NoSuchElementException("Invalid user id,user not found");
+            }
+            User userToUpdate = user.get();
+            Optional<ResetPassword> resetData = resetPasswordRepository.findByUserId(userToUpdate);
+            if(!resetData.isPresent()){
+
+                throw new NoSuchElementException("Not a valid request");
+            }
+            if(!resetData.get().getToken().equals(resetRequest.getToken())){
+
+                throw new RestServiceException("Invalid reset token");
+            }
+            if(!resetData.get().getExpiryDate().after(new Date())){
+
+                throw new RestServiceException("reset token expired");
+            }
+            userToUpdate.setPassword(resetRequest.getPassword());
+            userRepository.save(userToUpdate);
+            PasswordResettedResponse resettedResponse = new PasswordResettedResponse();
+            resettedResponse.setMessage("Password reset successfully!!!");
+            resettedResponse.setDatetime(new Date());
+            resettedResponse.setStatus(true);
+            return new ResponseEntity<>(resettedResponse, HttpStatus.CREATED);
+        }catch(RestServiceException ex){
+
+            throw ex;
+        }catch(DataAccessException ex){
+
+            throw new RestServiceException(ex);
+        }
+    }
 }
