@@ -1,21 +1,16 @@
 package com.spring.demo.rest;
 
-import com.spring.demo.entity.ReservationEntity;
 import com.spring.demo.entity.ResetPassword;
-import com.spring.demo.entity.RoomEntity;
 import com.spring.demo.entity.User;
 import com.spring.demo.errors.RestServiceException;
 import com.spring.demo.model.request.PasswordResetRequest;
-import com.spring.demo.model.request.ReservationRequest;
 import com.spring.demo.model.request.ResetPasswordRequest;
 import com.spring.demo.model.response.PasswordResettedResponse;
-import com.spring.demo.model.response.ReservationResponse;
-import com.spring.demo.model.response.ReserveResponse;
 import com.spring.demo.model.response.ResetPasswordResponse;
 import com.spring.demo.repository.*;
-import converter.RoomEntityToReservationResponseConverter;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -35,12 +30,12 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(ResourceConstants.ROOM_RESERVATION_V1)
+@RequestMapping(ResourceConstants.USER_V1)
+@Api(value = "User Authentication details", description = "User Authentication related operations handled in the route", tags = ("users"))
 public class ReservationResource {
 
     @Autowired
@@ -61,7 +56,7 @@ public class ReservationResource {
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  /*  @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasAuthority('ROOMS_READ')")
     public Page<ReservationResponse> getAvailableRooms(
             @RequestParam(value = "checkin")
@@ -107,27 +102,10 @@ public class ReservationResource {
             return new ResponseEntity<>(response, HttpStatus.FAILED_DEPENDENCY);
         }
 
-    }
-
-    @RequestMapping(path="", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ReservationResponse> updateReservation(
-            @RequestBody
-            ReservationRequest reservationRequest
-    ){
-        return new ResponseEntity<>(new ReservationResponse(), HttpStatus.OK);
-    }
-
-    @RequestMapping(path = "/{reservationId}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteReservation(
-
-            @PathVariable
-            long reservationId
-    ){
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    }*/
 
     @RequestMapping(path = "/forget_password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Reset Password", notes = "Accept password reset request and response with user Id and password reset token", nickname = "resetPassword")
     public ResponseEntity<ResetPasswordResponse> resetPassword(
 
             @RequestBody
@@ -160,6 +138,7 @@ public class ReservationResource {
     }
 
     @RequestMapping(path = "/reset_password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "Reset to new password", notes = "Accept new password with reset token and user id and update to new password", nickname = "updatePassword")
     public ResponseEntity<PasswordResettedResponse> updatePassword(@RequestBody PasswordResetRequest resetRequest){
 
         try{

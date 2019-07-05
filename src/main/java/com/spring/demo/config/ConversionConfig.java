@@ -1,9 +1,6 @@
 package com.spring.demo.config;
 
-import converter.ReservationEntityToReserveResponseConverter;
-import converter.ReservationRequestToReserveResponseConverter;
-import converter.ResetPasswordEntityToResetPasswordResponse;
-import converter.RoomEntityToReservationResponseConverter;
+import converter.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ConversionServiceFactoryBean;
@@ -24,6 +21,7 @@ public class ConversionConfig {
         converters.add(new ReservationRequestToReserveResponseConverter());
         converters.add(new ReservationEntityToReserveResponseConverter());
         converters.add(new ResetPasswordEntityToResetPasswordResponse());
+        converters.add(new AdsEntityToAdsResponseConverter());
         return converters;
     }
 

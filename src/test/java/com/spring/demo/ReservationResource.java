@@ -28,7 +28,7 @@ public class ReservationResource {
     public void setUp() throws Exception{
 
         RestAssured.port = port;
-        RestAssured.basePath = ResourceConstants.ROOM_RESERVATION_V1;
+        RestAssured.basePath = ResourceConstants.USER_V1;
         RestAssured.baseURI = "http://localhost";
     }
 

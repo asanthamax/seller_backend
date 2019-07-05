@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "user")
+@Table(name = "oauth_user")
 public class User implements UserDetails {
 
     @Id
