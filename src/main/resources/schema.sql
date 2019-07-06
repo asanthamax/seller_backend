@@ -56,7 +56,7 @@ CREATE TABLE `oauth_refresh_token` (
   `authentication` text NOT NULL
 );
 
-CREATE TABLE `user` (
+CREATE TABLE `oauth_user` (
   `user_name` varchar(100) NOT NULL,
   `password` text NOT NULL,
   `account_expired` tinyint(1) NOT NULL,
