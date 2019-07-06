@@ -107,7 +107,7 @@ ALTER TABLE `oauth_refresh_token`
 --
 -- Indexes for table `user`
 --
-ALTER TABLE `user`
+ALTER TABLE `oauth_user`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -123,7 +123,7 @@ ALTER TABLE `user_authorities`
 --
 -- AUTO_INCREMENT for table `user`
 --
-ALTER TABLE `user`
+ALTER TABLE `oauth_user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
