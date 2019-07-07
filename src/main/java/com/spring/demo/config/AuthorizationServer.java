@@ -26,19 +26,23 @@ import javax.sql.DataSource;
 @Import(ServerSecurityConfig.class)
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    @Qualifier("dataSource")
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
+    private final AuthenticationManager authenticationManager;
+
+    private final UserDetailsService userDetailsService;
+
+    private final PasswordEncoder oauthClientPasswordEncoder;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Qualifier("userDetailsServiceImpl")
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private PasswordEncoder oauthClientPasswordEncoder;
+    public AuthorizationServer(@Qualifier("dataSource") DataSource dataSource, AuthenticationManager authenticationManager,
+                               @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService,
+                               PasswordEncoder oauthClientPasswordEncoder) {
+        this.dataSource = dataSource;
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.oauthClientPasswordEncoder = oauthClientPasswordEncoder;
+    }
 
     @Bean
     public TokenStore tokenStore(){
@@ -53,7 +57,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer security){
 
         security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated").passwordEncoder(oauthClientPasswordEncoder);
     }
@@ -65,7 +69,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints){
 
         endpoints.tokenStore(tokenStore()).authenticationManager(authenticationManager).userDetailsService(userDetailsService);
     }

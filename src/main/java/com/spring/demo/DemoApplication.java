@@ -1,8 +1,10 @@
 package com.spring.demo;
 
+import com.spring.demo.config.FileStorageProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -16,6 +18,9 @@ import static springfox.documentation.builders.PathSelectors.regex;
 
 @SpringBootApplication
 @EnableSwagger2
+@EnableConfigurationProperties({
+		FileStorageProperties.class
+})
 @EnableAutoConfiguration
 @ComponentScan
 public class DemoApplication {

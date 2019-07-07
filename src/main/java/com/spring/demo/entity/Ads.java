@@ -52,11 +52,11 @@ public class Ads {
         this.adSlotId = adSlotId;
     }
 
-    public User getUserId() {
+    public Customer getUserId() {
         return userId;
     }
 
-    public void setUserId(User userId) {
+    public void setUserId(Customer userId) {
         this.userId = userId;
     }
 
@@ -98,12 +98,12 @@ public class Ads {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "User_userID", nullable = false)
-    private User userId;
+    private Customer userId;
 
     public Ads() {
     }
 
-    public Ads(String imgPath, int status, AdSlots adSlotId, User userId, String remarks, Date created_at, Date start_at, Date expire_at) {
+    public Ads(String imgPath, int status, AdSlots adSlotId, Customer userId, String remarks, Date created_at, Date start_at, Date expire_at) {
 
         this.imgPath = imgPath;
         this.status = status;

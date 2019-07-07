@@ -13,13 +13,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,71 +34,18 @@ import java.util.UUID;
 @Api(value = "User Authentication details", description = "User Authentication related operations handled in the route", tags = ("users"))
 public class ReservationResource {
 
-    @Autowired
-    PageableRoomRepository pageableRoomRepository;
+    private final ConversionService conversionService;
+
+    private final ResetPasswordRepository resetPasswordRepository;
+
+    private final UserRepository userRepository;
 
     @Autowired
-    RoomRepository roomRepository;
-
-    @Autowired
-    ReservationRepository reservationRepository;
-
-    @Autowired
-    ConversionService conversionService;
-
-    @Autowired
-    ResetPasswordRepository resetPasswordRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-  /*  @RequestMapping(path = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PreAuthorize("hasAuthority('ROOMS_READ')")
-    public Page<ReservationResponse> getAvailableRooms(
-            @RequestParam(value = "checkin")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate checIn,
-            @RequestParam(value = "checkout")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate checkOut, Pageable pageable){
-
-        Page<RoomEntity> roomEntityList = pageableRoomRepository.findAll(pageable);
-        return roomEntityList.map(p -> new RoomEntityToReservationResponseConverter().convert(p));
+    public ReservationResource(ConversionService conversionService, ResetPasswordRepository resetPasswordRepository, UserRepository userRepository) {
+        this.conversionService = conversionService;
+        this.resetPasswordRepository = resetPasswordRepository;
+        this.userRepository = userRepository;
     }
-
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<RoomEntity> getRoomById(@PathVariable Long id){
-
-        Optional<RoomEntity> room = roomRepository.findById(id);
-        return room.map(roomEntity -> new ResponseEntity<>(roomEntity, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
-    }
-
-    @RequestMapping(path = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ReserveResponse> createReservation(
-            @RequestBody
-            ReservationRequest reservationRequest
-    ){
-
-        ReservationEntity reservation = conversionService.convert(reservationRequest, ReservationEntity.class);
-        reservationRepository.save(reservation);
-
-        Optional<RoomEntity> entity = roomRepository.findById(reservationRequest.getRoomId());
-        ReserveResponse response = null;
-        if(entity.isPresent()) {
-
-            RoomEntity roomEntity = entity.get();
-            roomEntity.addReservationEntity(reservation);
-            roomRepository.save(roomEntity);
-            reservation.setRoomEntity(roomEntity);
-
-            response = conversionService.convert(reservation, ReserveResponse.class);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        }else{
-
-            return new ResponseEntity<>(response, HttpStatus.FAILED_DEPENDENCY);
-        }
-
-    }*/
 
     @RequestMapping(path = "/forget_password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Reset Password", notes = "Accept password reset request and response with user Id and password reset token", nickname = "resetPassword")

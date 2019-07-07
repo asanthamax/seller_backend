@@ -13,15 +13,49 @@ public class AdsResponse {
 
     private String adImage;
 
+    private Long adSlot;
+
+    private String customerName;
+
+    public Long getAdSlot() {
+        return adSlot;
+    }
+
+    public void setAdSlot(Long adSlot) {
+        this.adSlot = adSlot;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    private String customerEmail;
+
     public AdsResponse() {
     }
 
-    public AdsResponse(Long id, Date publishedDate, String adImage, int adStatus) {
+    public AdsResponse(Long id, Date publishedDate, String adImage, int adStatus,
+                       Long adSlot, String customerName, String customerEmail) {
 
         this.id = id;
         this.publishedDate = publishedDate;
         this.adImage = adImage;
         this.adStatus = adStatus;
+        this.adSlot = adSlot;
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
     }
 
     public Long getId() {

@@ -14,6 +14,9 @@ public class AdsEntityToAdsResponseConverter implements Converter<Ads, AdsRespon
         response.setAdImage(ads.getImgPath());
         response.setPublishedDate(ads.getStart_at());
         response.setAdStatus(ads.getStatus());
+        response.setAdSlot(ads.getAdSlotId().getId());
+        response.setCustomerEmail(ads.getUserId().getUser().getEmail());
+        response.setCustomerName(ads.getUserId().getUser().getFirstName()+" "+ads.getUserId().getUser().getLastName());
         return response;
     }
 }

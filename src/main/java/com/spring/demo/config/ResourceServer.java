@@ -17,7 +17,7 @@ public class ResourceServer extends ResourceServerConfigurerAdapter {
     private static final String SECURED_PATTERN = "/secured/**";
 
     @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+    public void configure(ResourceServerSecurityConfigurer resources){
         resources.resourceId(RESOURCE_ID);
     }
 

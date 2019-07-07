@@ -22,6 +22,7 @@ public class ConversionConfig {
         converters.add(new ReservationEntityToReserveResponseConverter());
         converters.add(new ResetPasswordEntityToResetPasswordResponse());
         converters.add(new AdsEntityToAdsResponseConverter());
+        converters.add(new AdSaveRequestToAdaddResponseConverter());
         return converters;
     }
 
