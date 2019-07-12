@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(ResourceConstants.PRODS_V1)
@@ -52,4 +49,23 @@ public class ProductResource {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    @RequestMapping(path = "/saveProduct", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PreAuthorize("hasAuthority('READ_WRITE_PRODUCTS')")
+    @ApiOperation(value = "save single product", notes = "save/update single product in database", nickname = "saveProduct")
+    public ResponseEntity saveProduct(@RequestBody  ProductResponse productResponse){
+
+        productService.saveProduct(productResponse);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(path = "/deleteProduct/{productId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PreAuthorize("hasAuthority('READ_WRITE_PRODUCTS')")
+    @ApiOperation(value = "delete product", notes = "delete given product id record from database", nickname = "deleteProduct")
+    public ResponseEntity deleteProduct(@PathVariable Long productId){
+
+        productService.deleteProduct(productId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

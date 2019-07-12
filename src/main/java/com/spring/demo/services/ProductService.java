@@ -145,4 +145,31 @@ public class ProductService {
         }
         return variationsAndImagesList;
     }
+
+    public boolean saveProduct(ProductResponse product){
+
+        Optional<Products> products = productsRepository.findById(product.getProductId());
+        if(products.isPresent()){
+
+            Products prodToSave = products.get();
+            prodToSave.setIsActive(product.getIsActive());
+            productsRepository.save(prodToSave);
+            return true;
+        }else{
+
+            throw new RestServiceException("Product not found for update");
+        }
+    }
+
+    public void deleteProduct(Long productId){
+
+        Optional<Products> products = productsRepository.findById(productId);
+        if(products.isPresent()){
+
+            productsRepository.delete(products.get());
+        }else{
+
+            throw new RestServiceException("Product not exists in database");
+        }
+    }
 }
