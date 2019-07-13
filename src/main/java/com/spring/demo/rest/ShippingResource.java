@@ -6,7 +6,6 @@ import com.spring.demo.services.FileStorageService;
 import com.spring.demo.services.ShippingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -84,8 +83,7 @@ public class ShippingResource {
             ,@RequestParam("ship_code")String shippingCode, @RequestParam("ship_method")String shippingMethod
             ,@RequestParam("ship_charge")Double shipping_charge, @RequestParam("id") Long id){
 
-        String fileName = fileStorageService.storeFile(file);
-        String logoURl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/uploads/").path("shipping").path(fileName).toUriString();
+        String logoURl = fileStorageService.storeFile(file);
         ShippingMethod shipMethod = new ShippingMethod(shippingCompany, logoURl, shippingCode,shippingMethod, shipping_charge);
         shipMethod.setId(id);
         this.shippingService.saveShippingMethod(shipMethod);

@@ -49,7 +49,7 @@ public class FileStorageService {
             }
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
+            return targetLocation.toUri().toURL().toString();
         }catch (IOException ex){
 
             throw new FileStorageException("Could not store file "+fileName+" please try again", ex);
