@@ -27,9 +27,14 @@ public class ReservationResource {
     @Before
     public void setUp() throws Exception{
 
+        setThingsUp(port, ResourceConstants.USER_V1, "http://localhost");
+    }
+
+    private static void setThingsUp(int port, String apiURl, String baseURL){
+
         RestAssured.port = port;
-        RestAssured.basePath = ResourceConstants.USER_V1;
-        RestAssured.baseURI = "http://localhost";
+        RestAssured.basePath = apiURl;
+        RestAssured.baseURI = baseURL;
     }
 
     @Test

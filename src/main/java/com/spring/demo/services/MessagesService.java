@@ -89,7 +89,7 @@ public class MessagesService {
 
     public Page<MessagesResponse> getMessagesByOrder(Pageable pageable, Long orderId) throws DataAccessException {
 
-        Page<Messages> messagesByOrder = messagesRepository.findByOrderId(orderId);
+        Page<Messages> messagesByOrder = messagesRepository.findByOrderId(orderId, pageable);
         List<MessagesResponse> messagesResponses = new ArrayList<>();
         for(Messages message: messagesByOrder){
 

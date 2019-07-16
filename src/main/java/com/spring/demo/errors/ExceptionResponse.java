@@ -15,14 +15,14 @@ public class ExceptionResponse {
     public ExceptionResponse(Date timeStamp, String message, String details, String httpCodeMessage) {
 
         super();
-        this.timeStamp = timeStamp;
+        this.timeStamp = new Date(timeStamp.getTime());
         this.message = message;
         this.details = details;
         this.httpCodeMessage = httpCodeMessage;
     }
 
     public Date getTimeStamp() {
-        return timeStamp;
+        return new Date(timeStamp.getTime());
     }
 
     public String getMessage() {

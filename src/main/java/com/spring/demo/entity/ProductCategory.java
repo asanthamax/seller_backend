@@ -17,7 +17,7 @@ public class ProductCategory {
         this.categorySlug = categorySlug;
         this.isParentCategory = isParentCategory;
         this.parentCategoryId = parentCategoryId;
-        this.createdDate = createdDate;
+        this.createdDate = new Date(createdDate.getTime());
         this.isActive = isActive;
     }
 
@@ -66,11 +66,11 @@ public class ProductCategory {
     }
 
     public Date getCreatedDate() {
-        return createdDate;
+        return new Date(createdDate.getTime());
     }
 
     public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+        this.createdDate = new Date(createdDate.getTime());
     }
 
     public int getIsActive() {

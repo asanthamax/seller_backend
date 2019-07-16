@@ -1,6 +1,7 @@
 package com.spring.demo.rest;
 
 import com.spring.demo.entity.ShippingMethod;
+import com.spring.demo.errors.FileStorageException;
 import com.spring.demo.errors.RequestNotFoundException;
 import com.spring.demo.services.FileStorageService;
 import com.spring.demo.services.ShippingService;
@@ -67,13 +68,18 @@ public class ShippingResource {
     @ApiOperation(value = "add new shpping method", notes = "add a new shipping method from here", nickname = "saveShippingDetails")
     public ResponseEntity saveShippingDetails(@RequestParam("file")MultipartFile file, @RequestParam("company") String shippingCompany
                                                 ,@RequestParam("ship_code")String shippingCode, @RequestParam("ship_method")String shippingMethod
-                                                ,@RequestParam("ship_charge")Double shipping_charge){
+                                                ,@RequestParam("ship_charge")Double shipping_charge) throws FileStorageException {
 
-            String fileName = fileStorageService.storeFile(file);
-            String logoURl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/uploads/").path("shipping").path(fileName).toUriString();
-            ShippingMethod shipMethod = new ShippingMethod(shippingCompany, logoURl, shippingCode,shippingMethod, shipping_charge);
-            this.shippingService.saveShippingMethod(shipMethod);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            try {
+                String fileName = fileStorageService.storeFile(file);
+                String logoURl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/uploads/").path("shipping").path(fileName).toUriString();
+                ShippingMethod shipMethod = new ShippingMethod(shippingCompany, logoURl, shippingCode, shippingMethod, shipping_charge);
+                this.shippingService.saveShippingMethod(shipMethod);
+                return new ResponseEntity(HttpStatus.NO_CONTENT);
+            }catch (FileStorageException e) {
+
+                throw new FileStorageException(e.getMessage(), e);
+            }
     }
 
     @RequestMapping(value = "/update_shipping", method = RequestMethod.PUT)
@@ -81,13 +87,18 @@ public class ShippingResource {
     @ApiOperation(value = "update shpping method", notes = "update shipping method from here", nickname = "updateShippingDetails")
     public ResponseEntity updateShippingDetails(@RequestParam("file")MultipartFile file, @RequestParam("company") String shippingCompany
             ,@RequestParam("ship_code")String shippingCode, @RequestParam("ship_method")String shippingMethod
-            ,@RequestParam("ship_charge")Double shipping_charge, @RequestParam("id") Long id){
+            ,@RequestParam("ship_charge")Double shipping_charge, @RequestParam("id") Long id) throws FileStorageException {
 
-        String logoURl = fileStorageService.storeFile(file);
-        ShippingMethod shipMethod = new ShippingMethod(shippingCompany, logoURl, shippingCode,shippingMethod, shipping_charge);
-        shipMethod.setId(id);
-        this.shippingService.saveShippingMethod(shipMethod);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        try {
+            String logoURl = fileStorageService.storeFile(file);
+            ShippingMethod shipMethod = new ShippingMethod(shippingCompany, logoURl, shippingCode, shippingMethod, shipping_charge);
+            shipMethod.setId(id);
+            this.shippingService.saveShippingMethod(shipMethod);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }catch (FileStorageException e) {
+
+            throw new FileStorageException(e.getMessage(), e);
+        }
     }
 
     @RequestMapping(value = "/delete_shipping", method = RequestMethod.DELETE)
@@ -95,13 +106,18 @@ public class ShippingResource {
     @ApiOperation(value = "delete new shpping method", notes = "delete a new shipping method from here", nickname = "saveShippingDetails")
     public ResponseEntity deleteShippingDetails(@RequestParam("file")MultipartFile file, @RequestParam("company") String shippingCompany
             ,@RequestParam("ship_code")String shippingCode, @RequestParam("ship_method")String shippingMethod
-            ,@RequestParam("ship_charge")Double shipping_charge, @RequestParam("id") Long id){
+            ,@RequestParam("ship_charge")Double shipping_charge, @RequestParam("id") Long id) throws FileStorageException{
 
-        String fileName = fileStorageService.storeFile(file);
-        String logoURl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/uploads/").path("shipping").path(fileName).toUriString();
-        ShippingMethod shipMethod = new ShippingMethod(shippingCompany, logoURl, shippingCode,shippingMethod, shipping_charge);
-        shipMethod.setId(id);
-        this.shippingService.deleteShippingMethod(shipMethod);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        try {
+            String fileName = fileStorageService.storeFile(file);
+            String logoURl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/uploads/").path("shipping").path(fileName).toUriString();
+            ShippingMethod shipMethod = new ShippingMethod(shippingCompany, logoURl, shippingCode, shippingMethod, shipping_charge);
+            shipMethod.setId(id);
+            this.shippingService.deleteShippingMethod(shipMethod);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }catch(FileStorageException e){
+
+            throw new FileStorageException(e.getMessage(), e);
+        }
     }
 }

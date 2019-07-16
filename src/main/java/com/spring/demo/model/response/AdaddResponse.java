@@ -17,7 +17,7 @@ public class AdaddResponse {
 
     public AdaddResponse(Long adId, Date approveRejectDatetime, String message) {
         this.adId = adId;
-        this.approveRejectDatetime = approveRejectDatetime;
+        this.approveRejectDatetime = new Date(approveRejectDatetime.getTime());
         this.message = message;
     }
 
@@ -27,11 +27,11 @@ public class AdaddResponse {
     }
 
     public Date getApproveRejectDatetime() {
-        return approveRejectDatetime;
+        return new Date(approveRejectDatetime.getTime());
     }
 
     public void setApproveRejectDatetime(Date approveRejectDatetime) {
-        this.approveRejectDatetime = approveRejectDatetime;
+        this.approveRejectDatetime = new Date(approveRejectDatetime.getTime());
     }
 
     public String getMessage() {

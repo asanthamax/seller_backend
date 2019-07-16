@@ -18,16 +18,16 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse badRequest(Exception ex){
 
-        logger.error("Bad Request", ex.getMessage());
+        logger.error("Bad Request, eg: {}", ex.getMessage(), ex);
         return new ErrorResponse(400, "Bad Request");
 
     }
 
     @ExceptionHandler(value = {RequestNotFoundException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.FAILED_DEPENDENCY)
     public ErrorResponse unknownException(RequestNotFoundException ex){
 
-        logger.error("Resource not found", ex.getMessage());
+        logger.error("Exception occurred, eg: {}", ex.getMessage(), ex);
         return new ErrorResponse(404, "Resource not found");
     }
 }

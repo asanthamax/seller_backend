@@ -24,7 +24,7 @@ public class FileStorageService {
     private final Path fileStorageLocation;
 
     @Autowired
-    public FileStorageService(FileStorageProperties fileProperties){
+    public FileStorageService(FileStorageProperties fileProperties) throws FileStorageException {
 
         this.fileStorageLocation = Paths.get(fileProperties.getUploadDir()).toAbsolutePath().normalize();
         try{
@@ -34,11 +34,11 @@ public class FileStorageService {
 
         }catch (Exception ex){
 
-            throw new FileStorageException("Could not find or create directory");
+            throw new FileStorageException("Could not find or create directory", ex);
         }
     }
 
-    public String storeFile(MultipartFile file){
+    public String storeFile(MultipartFile file) throws FileStorageException {
 
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         try{
@@ -56,7 +56,7 @@ public class FileStorageService {
         }
     }
 
-    public Resource loadFileAsResource(String fileName){
+    public Resource loadFileAsResource(String fileName) throws RequestFileNotFoundException {
 
         try{
 

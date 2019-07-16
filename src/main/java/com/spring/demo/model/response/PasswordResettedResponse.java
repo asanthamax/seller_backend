@@ -25,11 +25,11 @@ public class PasswordResettedResponse {
     }
 
     public Date getDatetime() {
-        return datetime;
+        return new Date(datetime.getTime());
     }
 
     public void setDatetime(Date datetime) {
-        this.datetime = datetime;
+        this.datetime = new Date(datetime.getTime());
     }
 
     public PasswordResettedResponse() {
@@ -40,6 +40,6 @@ public class PasswordResettedResponse {
 
         this.message = message;
         this.status = status;
-        this.datetime = datetime;
+        this.datetime = new Date(datetime.getTime());
     }
 }

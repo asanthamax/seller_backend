@@ -1,6 +1,6 @@
 package com.spring.demo.errors;
 
-public class FileStorageException extends RuntimeException {
+public class FileStorageException extends Exception {
 
     public FileStorageException(String message){
 
@@ -11,4 +11,5 @@ public class FileStorageException extends RuntimeException {
 
         super(message, cause);
     }
+
 }

@@ -69,27 +69,28 @@ public class Ads {
     }
 
     public Date getCreated_at() {
-        return created_at;
+        return new Date(created_at.getTime());
     }
 
     public void setCreated_at(Date created_at) {
-        this.created_at = created_at;
+        this.created_at = new Date(created_at.getTime());
     }
 
     public Date getStart_at() {
-        return start_at;
+        return new Date(start_at.getTime());
     }
 
     public void setStart_at(Date start_at) {
-        this.start_at = start_at;
+        this.start_at = new Date(start_at.getTime());
     }
 
     public Date getExpire_at() {
-        return expire_at;
+
+        return new Date(expire_at.getTime());
     }
 
     public void setExpire_at(Date expire_at) {
-        this.expire_at = expire_at;
+        this.expire_at = new Date(expire_at.getTime());
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -110,9 +111,9 @@ public class Ads {
         this.adSlotId = adSlotId;
         this.userId = userId;
         this.remarks = remarks;
-        this.created_at = created_at;
-        this.start_at = start_at;
-        this.expire_at = expire_at;
+        this.created_at = new Date(created_at.getTime());
+        this.start_at = new Date(start_at.getTime());
+        this.expire_at = new Date(expire_at.getTime());
     }
 
     @Column(name = "remarks")

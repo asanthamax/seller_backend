@@ -28,7 +28,7 @@ public class Order {
     }
 
     public Order(Date orderedDate, String orderAmount, double quantity, String quantity_unit, int orderStatus, String remarks, Customer customer, Seller seller, ShippingMethod shippingMethod, Collection<Products> product, Collection<ProductVariations> productVariation, String orderType) {
-        this.orderedDate = orderedDate;
+        this.orderedDate = new Date(orderedDate.getTime());
         this.orderAmount = orderAmount;
         this.quantity = quantity;
         this.quantity_unit = quantity_unit;
@@ -48,11 +48,11 @@ public class Order {
     }
 
     public Date getOrderedDate() {
-        return orderedDate;
+        return new Date(orderedDate.getTime());
     }
 
     public void setOrderedDate(Date orderedDate) {
-        this.orderedDate = orderedDate;
+        this.orderedDate = new Date(orderedDate.getTime());
     }
 
     public String getOrderAmount() {
@@ -171,7 +171,7 @@ public class Order {
     @JoinTable(name = "orderproduct", joinColumns = @JoinColumn(name = "Orders_orderID", referencedColumnName = "orderID"), inverseJoinColumns = @JoinColumn(name = "orderProductID", referencedColumnName = "productID"))
     private Collection<Products> product;
 
-    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private Collection<ProductVariations> productVariation;
 
     @Column(name = "orderType")

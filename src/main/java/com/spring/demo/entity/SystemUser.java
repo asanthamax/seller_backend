@@ -25,8 +25,8 @@ public class SystemUser {
         this.userName = userName;
         this.password = password;
         this.userResetKey = userResetKey;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+        this.createdDate = new Date(createdDate.getTime());
+        this.modifiedDate = new Date(modifiedDate.getTime());
         this.isActive = isActive;
         this.userRole = userRole;
         this.regToken = regToken;
@@ -115,19 +115,19 @@ public class SystemUser {
     }
 
     public Date getCreatedDate() {
-        return createdDate;
+        return new Date(createdDate.getTime());
     }
 
     public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+        this.createdDate = new Date(createdDate.getTime());
     }
 
     public Date getModifiedDate() {
-        return modifiedDate;
+        return new Date(modifiedDate.getTime());
     }
 
     public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
+        this.modifiedDate = new Date(modifiedDate.getTime());
     }
 
     public int getIsActive() {

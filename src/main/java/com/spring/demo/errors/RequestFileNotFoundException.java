@@ -1,6 +1,10 @@
 package com.spring.demo.errors;
 
-public class RequestFileNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class RequestFileNotFoundException extends Exception {
 
     public RequestFileNotFoundException(String message){
 

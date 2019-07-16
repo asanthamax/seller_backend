@@ -50,7 +50,7 @@ public class AdsResponse {
                        Long adSlot, String customerName, String customerEmail) {
 
         this.id = id;
-        this.publishedDate = publishedDate;
+        this.publishedDate = new Date(publishedDate.getTime());
         this.adImage = adImage;
         this.adStatus = adStatus;
         this.adSlot = adSlot;
@@ -68,11 +68,11 @@ public class AdsResponse {
     }
 
     public Date getPublishedDate() {
-        return publishedDate;
+        return new Date(publishedDate.getTime());
     }
 
     public void setPublishedDate(Date publishedDate) {
-        this.publishedDate = publishedDate;
+        this.publishedDate = new Date(publishedDate.getTime());
     }
 
     public String getAdImage() {

@@ -1,5 +1,6 @@
 package com.spring.demo.rest;
 
+import com.spring.demo.errors.FileStorageException;
 import com.spring.demo.errors.RequestNotFoundException;
 import com.spring.demo.model.request.SliderRequest;
 import com.spring.demo.model.response.SliderResponse;
@@ -66,7 +67,7 @@ public class SliderResource {
     @PreAuthorize("hasAuthority('READ_WRITE_SLIDE')")
     @ApiOperation(value = "save new slide", notes = "save new slide into database", nickname = "saveSlide")
     public ResponseEntity saveSlide(@RequestParam("file")MultipartFile file, @RequestParam("sliderTitle") String sliderTitle
-                                    ,@RequestParam("sliderOrder") int sliderOrder) throws RequestNotFoundException{
+                                    ,@RequestParam("sliderOrder") int sliderOrder) throws RequestNotFoundException, FileStorageException {
 
         try {
             String imgURL = storageService.storeFile(file);
@@ -80,6 +81,9 @@ public class SliderResource {
         }catch (DataAccessException ex){
 
             throw new RequestNotFoundException(ex.getMessage(), ex);
+        } catch (FileStorageException e) {
+
+            throw new FileStorageException(e.getMessage(), e);
         }
     }
 
@@ -115,7 +119,7 @@ public class SliderResource {
     @RequestMapping(value = "/updateSlide", method = RequestMethod.PUT)
     @PreAuthorize("hasAuthority('READ_WRITE_SLIDE')")
     @ApiOperation(value = "update slide image", notes = "update slide image to new image", nickname = "updateSlide")
-    public ResponseEntity updateSlide(@RequestParam("file") MultipartFile file, @RequestParam("id") Long sliderID) throws RequestNotFoundException{
+    public ResponseEntity updateSlide(@RequestParam("file") MultipartFile file, @RequestParam("id") Long sliderID) throws RequestNotFoundException, FileStorageException {
 
         try{
 
@@ -125,6 +129,8 @@ public class SliderResource {
         }catch (RequestNotFoundException ex){
 
             throw new RequestNotFoundException(ex.getMessage(), ex);
+        } catch (FileStorageException e) {
+            throw new FileStorageException(e.getMessage(), e);
         }
     }
 }

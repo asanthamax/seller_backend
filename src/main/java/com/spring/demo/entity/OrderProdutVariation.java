@@ -1,6 +1,7 @@
 package com.spring.demo.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "orderproduct_variations")
@@ -14,6 +15,14 @@ public class OrderProdutVariation {
         this.oder = oder;
         this.variations = variations;
         this.quantity = quantity;
+    }
+
+    public OrderProductIdClass getId() {
+        return id;
+    }
+
+    public void setId(OrderProductIdClass id) {
+        this.id = id;
     }
 
     public OrderProdutVariation() {
@@ -40,17 +49,19 @@ public class OrderProdutVariation {
         this.quantity = quantity;
     }
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId(value = "order_id")
     @JoinColumn(name = "order_id", nullable = false)
-
     private Order oder;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId(value = "product_variation_id")
     @JoinColumn(name = "product_variation_id", nullable = false)
     private ProductVariations variations;
 
     @Column(name = "quantity")
     private double quantity;
+
+    @EmbeddedId
+    private OrderProductIdClass id;
 }

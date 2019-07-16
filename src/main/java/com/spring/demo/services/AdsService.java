@@ -43,16 +43,16 @@ public class AdsService {
                 adToSave.setRemarks(request.getRemarks());
                 adToSave.setStatus(request.getStatus());
                 adsRepository.save(adToSave);
-                logger.info("Given Ad is updated :"+request.getAdId());
+                logger.info("Given Ad is updated : {}", request.getAdId());
                 return true;
             }else{
 
-                logger.error("Given Ad Slot is invalid :"+request.getAdSlotId());
+                logger.error("Given Ad Slot is invalid : {}", request.getAdSlotId());
                 return false;
             }
         }else {
 
-            logger.error("Ad id is not found in database :"+request.getAdId());
+            logger.error("Ad id is not found in database : {}", request.getAdId());
             return false;
         }
     }
@@ -73,11 +73,11 @@ public class AdsService {
         if(ads.isPresent()){
 
             adsRepository.delete(ads.get());
-            logger.info("Requested Ad is deleted :"+adId);
+            logger.info("Requested Ad is deleted : {}", adId);
             return true;
         }else{
 
-            logger.error("Requested Ad is not in database :"+adId);
+            logger.error("Requested Ad is not in database : {}", adId);
             return false;
         }
     }

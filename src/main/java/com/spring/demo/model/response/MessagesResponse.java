@@ -10,7 +10,7 @@ public class MessagesResponse {
 
     public MessagesResponse(String message, Date messageDate, SystemUser sender, SystemUser reciever, int messageStatus) {
         this.message = message;
-        this.messageDate = messageDate;
+        this.messageDate = new Date(messageDate.getTime());
         this.sender = sender;
         this.reciever = reciever;
         this.messageStatus = messageStatus;
@@ -28,11 +28,11 @@ public class MessagesResponse {
     }
 
     public Date getMessageDate() {
-        return messageDate;
+        return new Date(messageDate.getTime());
     }
 
     public void setMessageDate(Date messageDate) {
-        this.messageDate = messageDate;
+        this.messageDate = new Date(messageDate.getTime());
     }
 
     public SystemUser getSender() {

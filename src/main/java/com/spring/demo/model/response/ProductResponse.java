@@ -45,8 +45,8 @@ public class ProductResponse {
         this.isSample = isSample;
         this.samplePrice = samplePrice;
         this.isActive = isActive;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+        this.createdDate = new Date(createdDate.getTime());
+        this.modifiedDate = new Date(modifiedDate.getTime());
         this.category = category;
         this.user = user;
         this.productReviews = productReviews;
@@ -189,19 +189,19 @@ public class ProductResponse {
     }
 
     public Date getCreatedDate() {
-        return createdDate;
+        return new Date(createdDate.getTime());
     }
 
     public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+        this.createdDate = new Date(createdDate.getTime());
     }
 
     public Date getModifiedDate() {
-        return modifiedDate;
+        return new Date(modifiedDate.getTime());
     }
 
     public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
+        this.modifiedDate = new Date(modifiedDate.getTime());
     }
 
     public ProductCategory getCategory() {

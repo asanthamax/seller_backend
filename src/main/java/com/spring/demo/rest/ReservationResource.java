@@ -2,6 +2,7 @@ package com.spring.demo.rest;
 
 import com.spring.demo.entity.ResetPassword;
 import com.spring.demo.entity.User;
+import com.spring.demo.errors.RequestNotFoundException;
 import com.spring.demo.errors.RestServiceException;
 import com.spring.demo.model.request.PasswordResetRequest;
 import com.spring.demo.model.request.ResetPasswordRequest;
@@ -53,7 +54,7 @@ public class ReservationResource {
 
             @RequestBody
             ResetPasswordRequest resetPasswordRequest
-    ){
+    ) throws RequestNotFoundException{
 
         try {
 
@@ -73,16 +74,16 @@ public class ReservationResource {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }catch(DataAccessException ex){
 
-            throw new RestServiceException(ex);
-        } catch (ParseException e) {
+            throw new RequestNotFoundException(ex.getMessage(), ex);
+        }catch (ParseException e) {
 
-            throw new RestServiceException("Server Error Occurred");
+            throw new RequestNotFoundException(e.getMessage(), e);
         }
     }
 
     @RequestMapping(path = "/reset_password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "Reset to new password", notes = "Accept new password with reset token and user id and update to new password", nickname = "updatePassword")
-    public ResponseEntity<PasswordResettedResponse> updatePassword(@RequestBody PasswordResetRequest resetRequest){
+    public ResponseEntity<PasswordResettedResponse> updatePassword(@RequestBody PasswordResetRequest resetRequest) throws RequestNotFoundException{
 
         try{
 
@@ -120,10 +121,7 @@ public class ReservationResource {
             return new ResponseEntity<>(resettedResponse, HttpStatus.CREATED);
         }catch(RestServiceException ex){
 
-            throw ex;
-        }catch(DataAccessException ex){
-
-            throw new RestServiceException(ex);
+            throw new RequestNotFoundException(ex.getMessage(), ex);
         }
     }
 }

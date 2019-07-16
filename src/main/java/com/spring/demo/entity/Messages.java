@@ -21,7 +21,7 @@ public class Messages {
 
     public Messages(String messageText, Date messageDate, SystemUser sender, SystemUser reciever, int messageStaus, Order order) {
         this.messageText = messageText;
-        this.messageDate = messageDate;
+        this.messageDate = new Date(messageDate.getTime());
 
         this.sender = sender;
         this.reciever = reciever;
@@ -42,11 +42,11 @@ public class Messages {
     }
 
     public Date getMessageDate() {
-        return messageDate;
+        return new Date(messageDate.getTime());
     }
 
     public void setMessageDate(Date messageDate) {
-        this.messageDate = messageDate;
+        this.messageDate = new Date(messageDate.getTime());
     }
 
     public SystemUser getSender() {

@@ -17,7 +17,7 @@ public class OrderResponse {
 
     public OrderResponse(Long orderID, Date orderDate, String orderAmount, Customer customer, Seller seller, ShippingMethod shippingMethod, List<OrderProductVariationResponse> orderVariation) {
         this.orderID = orderID;
-        this.orderDate = orderDate;
+        this.orderDate = new Date(orderDate.getTime());
         this.orderAmount = orderAmount;
         this.customer = customer;
         this.seller = seller;
@@ -32,11 +32,11 @@ public class OrderResponse {
     }
 
     public Date getOrderDate() {
-        return orderDate;
+        return new Date(orderDate.getTime());
     }
 
     public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+        this.orderDate = new Date(orderDate.getTime());
     }
 
     public String getOrderAmount() {

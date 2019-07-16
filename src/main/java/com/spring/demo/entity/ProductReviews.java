@@ -25,7 +25,7 @@ public class ProductReviews {
     public ProductReviews(Double ratingScore, String review, Date reviewDate, int reviewStatus, Products products, Customer customer) {
         this.ratingScore = ratingScore;
         this.review = review;
-        this.reviewDate = reviewDate;
+        this.reviewDate = new Date(reviewDate.getTime());
         this.reviewStatus = reviewStatus;
         this.products = products;
         this.customer = customer;
@@ -52,11 +52,11 @@ public class ProductReviews {
     }
 
     public Date getReviewDate() {
-        return reviewDate;
+        return new Date(reviewDate.getTime());
     }
 
     public void setReviewDate(Date reviewDate) {
-        this.reviewDate = reviewDate;
+        this.reviewDate = new Date(reviewDate.getTime());
     }
 
     public int getReviewStatus() {

@@ -27,7 +27,7 @@ public class DemoApplication {
 
 	public Docket api(){
 
-		return new Docket(DocumentationType.SWAGGER_2).groupName("User").select().apis(RequestHandlerSelectors.basePackage("com.spring.demo"))
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.spring.demo"))
 				.paths(regex("/.*")).build().apiInfo(getApiInfo());
 	}
 
@@ -40,6 +40,8 @@ public class DemoApplication {
 		return new ApiInfoBuilder().title("Admin Backend Api")
 				.description("Admin Backend Api Service for Reselling site")
 				.contact(new Contact("Asantha Thilina","https://github.com/asanthamax","asanthathilina@gmail.com"))
+				.license("Apache 2.0")
+				.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
 				.version("1.0.0")
 				.build();
 	}

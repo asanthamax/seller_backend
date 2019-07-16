@@ -25,7 +25,7 @@ public class ResetPassword {
 
     public ResetPassword(String token, Date expiryDate, User user) {
         this.token = token;
-        this.expiryDate = expiryDate;
+        this.expiryDate = new Date(expiryDate.getTime());
         this.user = user;
     }
 
@@ -46,11 +46,11 @@ public class ResetPassword {
     }
 
     public Date getExpiryDate() {
-        return expiryDate;
+        return new Date(expiryDate.getTime());
     }
 
     public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
+        this.expiryDate = new Date(expiryDate.getTime());
     }
 
     public User getUser() {

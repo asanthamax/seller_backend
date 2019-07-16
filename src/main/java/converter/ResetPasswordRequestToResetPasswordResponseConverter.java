@@ -9,7 +9,6 @@ public class ResetPasswordRequestToResetPasswordResponseConverter implements Con
     @Override
     public ResetPassword convert(ResetPasswordRequest resetPasswordRequest) {
 
-        ResetPassword resetEntity = new ResetPassword();
         return null;
     }
 }

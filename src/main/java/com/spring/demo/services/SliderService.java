@@ -46,10 +46,11 @@ public class SliderService {
         if(singleSlider.isPresent()){
 
             SliderResponse singleResponse = new SliderResponse();
-            singleResponse.setSlideURL(singleSlider.get().getImgUrl());
-            singleResponse.setSliderTitle(singleSlider.get().getSlideTitle());
-            singleResponse.setSliderOrder(singleSlider.get().getSliderOrder());
-            singleResponse.setSliderID(singleSlider.get().getId());
+            Sliders slideCopy = singleSlider.get();
+            singleResponse.setSlideURL(slideCopy.getImgUrl());
+            singleResponse.setSliderTitle(slideCopy.getSlideTitle());
+            singleResponse.setSliderOrder(slideCopy.getSliderOrder());
+            singleResponse.setSliderID(slideCopy.getId());
             return singleResponse;
         }else{
 
@@ -81,9 +82,10 @@ public class SliderService {
         Optional<Sliders> slider = sliderRepository.findById(request.getSliderID());
         if (slider.isPresent()){
 
-            slider.get().setSlideTitle(request.getSliderTitle());
-            slider.get().setSliderOrder(request.getSliderOrder());
-            sliderRepository.save(slider.get());
+            Sliders slideCopy = slider.get();
+            slideCopy.setSlideTitle(request.getSliderTitle());
+            slideCopy.setSliderOrder(request.getSliderOrder());
+            sliderRepository.save(slideCopy);
         }else {
 
             throw new RequestNotFoundException("Slider cannot update, not in the database");
