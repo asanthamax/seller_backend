@@ -12,6 +12,7 @@ public class Ads {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "imgPath")
@@ -94,7 +95,7 @@ public class Ads {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "AdSlots_id", nullable = false)
+    @JoinColumn(name = "AdSlots_id", referencedColumnName = "id",nullable = false)
     private AdSlots adSlotId;
 
     @ManyToOne(fetch = FetchType.LAZY)
