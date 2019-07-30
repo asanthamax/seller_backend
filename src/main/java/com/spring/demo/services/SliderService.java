@@ -61,7 +61,7 @@ public class SliderService {
 
     public void saveSlider(SliderResponse slider) throws DataAccessException{
 
-        Sliders newSlider = new Sliders(slider.getSliderTitle(), slider.getSlideURL(), slider.getSliderOrder(), 1, slider.getSliderTitle());
+        Sliders newSlider = new Sliders(slider.getSlideURL(), slider.getSliderBasePath(), slider.getSliderOrder(), 1, slider.getSliderTitle());
         sliderRepository.save(newSlider);
     }
 

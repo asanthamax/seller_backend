@@ -1,5 +1,6 @@
 package com.spring.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -78,7 +79,11 @@ public class Ads {
     }
 
     public Date getStart_at() {
-        return new Date(start_at.getTime());
+
+        if(start_at != null)
+            return new Date(start_at.getTime());
+        else
+            return null;
     }
 
     public void setStart_at(Date start_at) {
@@ -120,12 +125,15 @@ public class Ads {
     @Column(name = "remarks")
     private String remarks;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "createdDate")
     private Date created_at;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "startDate")
     private Date start_at;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "expireDate")
     private Date expire_at;
 }

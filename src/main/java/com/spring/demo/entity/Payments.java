@@ -138,7 +138,7 @@ public class Payments {
     private int status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "User_userID")
+    @JoinColumn(name = "userid")
     private Seller seller;
 
     public Double getTotalSumAmount() {
@@ -169,18 +169,18 @@ public class Payments {
     @JoinColumn(name = "invoice_invoiceID")
     private Invoice invoice;
 
-    @Formula(value = "SELECT SUM(payments.amount) FROM Payments payments WHERE payments.User_userID = id")
+    @Formula("(SELECT SUM(pay.amount) FROM sellerpayments pay GROUP BY pay.userid)")
     private Double totalAmount;
 
-    @Formula(value = "SELECT SUM(payments) FROM Payments payments WHERE payments.User_userID = id")
+    @Formula("(SELECT COUNT(*) FROM sellerpayments payments GROUP BY payments.userid)")
     private int totalOrders;
 
-    @Formula(value = "SELECT SUM(payments.amount) FROM Payments payments")
+    @Formula("(SELECT SUM(payments.amount) FROM sellerpayments payments)")
     private Double totalSumAmount;
 
-    @Formula(value = "SELECT SUM(payments.amount) FROM Payments payments WHERE payments.paymentStatus = 'Pending'")
+    @Formula("(SELECT SUM(payments.amount) FROM sellerpayments payments WHERE payments.payment_status = 'Pending')")
     private Double totalPayable;
 
-    @Formula(value = "SELECT SUM(payments.amount) FROM Payments payments WHERE payments.paymentStatus = 'Paid'")
+    @Formula("(SELECT SUM(payments.amount) FROM sellerpayments payments WHERE payments.payment_status = 'Paid')")
     private Double totalPaid;
 }

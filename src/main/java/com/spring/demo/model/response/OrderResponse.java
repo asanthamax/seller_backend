@@ -1,5 +1,6 @@
 package com.spring.demo.model.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.spring.demo.entity.Customer;
 import com.spring.demo.entity.Seller;
 import com.spring.demo.entity.ShippingMethod;
@@ -81,6 +82,7 @@ public class OrderResponse {
 
     private Long orderID;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date orderDate;
 
     private String orderAmount;

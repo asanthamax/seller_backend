@@ -1,5 +1,7 @@
 package com.spring.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -177,9 +179,11 @@ public class SystemUser {
     @Column(name = "userResetKey")
     private String userResetKey;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "createdDate", nullable = false)
     private Date createdDate;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "modifiedDate", nullable = false)
     private Date modifiedDate;
 

@@ -61,4 +61,32 @@ public class PaymentResource {
             throw new RequestNotFoundException(ex.getMessage(), ex);
         }
     }
+
+    @RequestMapping(value = "/paid", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PreAuthorize("hasAuthority('READ_PAYMENTS')")
+    @ApiOperation(value = "get all paid payments", notes = "get all paid payments", nickname = "getAllPaid")
+    public ResponseEntity<PaymentsResponse> getAllPaid(Pageable pageable) throws RequestNotFoundException{
+
+        try{
+
+            return new ResponseEntity<>(paymentsService.getAllPaids(pageable), HttpStatus.ACCEPTED);
+        }catch (DataAccessException ex){
+
+            throw new RequestNotFoundException(ex.getMessage(), ex);
+        }
+    }
+
+    @RequestMapping(value = "/update_payment_status", method = RequestMethod.PUT)
+    @ApiOperation(value = "update all payable payment", notes = "update all the payable payment status in database in a cron job", nickname = "updatePaymentStatus")
+    public ResponseEntity updatePaymentStatus() throws RequestNotFoundException{
+
+        try{
+
+            paymentsService.updatePaymentStatus();
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }catch (DataAccessException ex){
+
+            throw new RequestNotFoundException(ex.getMessage(), ex);
+        }
+    }
 }

@@ -26,7 +26,7 @@ public class FileStorageService {
     @Autowired
     public FileStorageService(FileStorageProperties fileProperties) throws FileStorageException {
 
-        this.fileStorageLocation = Paths.get(fileProperties.getUploadDir()).toAbsolutePath().normalize();
+        this.fileStorageLocation = Paths.get(fileProperties.getLocation()).toAbsolutePath().normalize();
         try{
 
             if(!Files.isDirectory(this.fileStorageLocation))

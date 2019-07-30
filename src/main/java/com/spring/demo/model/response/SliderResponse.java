@@ -10,11 +10,12 @@ public class SliderResponse {
         return sliderID;
     }
 
-    public SliderResponse(Long sliderID, String slideURL, int sliderOrder, String sliderTitle) {
+    public SliderResponse(Long sliderID, String slideURL, int sliderOrder, String sliderTitle, String sliderBasePath) {
         this.sliderID = sliderID;
         this.slideURL = slideURL;
         this.sliderOrder = sliderOrder;
         this.sliderTitle = sliderTitle;
+        this.sliderBasePath = sliderBasePath;
     }
 
     public SliderResponse() {
@@ -51,4 +52,14 @@ public class SliderResponse {
     private int sliderOrder;
 
     private String sliderTitle;
+
+    public String getSliderBasePath() {
+        return sliderBasePath;
+    }
+
+    public void setSliderBasePath(String sliderBasePath) {
+        this.sliderBasePath = sliderBasePath;
+    }
+
+    private String sliderBasePath;
 }

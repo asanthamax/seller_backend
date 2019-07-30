@@ -8,7 +8,7 @@ public class PendingPaymentResponse {
 
     private Double amount;
 
-    public PendingPaymentResponse(Long userID, String sellerName, Double amount, int numberOfOrders) {
+    public PendingPaymentResponse(Long userID, String sellerName, Double amount, Long numberOfOrders) {
         this.userID = userID;
         this.sellerName = sellerName;
         this.amount = amount;
@@ -44,14 +44,14 @@ public class PendingPaymentResponse {
         this.amount = amount;
     }
 
-    public int getNumberOfOrders() {
+    public Long getNumberOfOrders() {
         return numberOfOrders;
     }
 
-    public void setNumberOfOrders(int numberOfOrders) {
+    public void setNumberOfOrders(Long numberOfOrders) {
         this.numberOfOrders = numberOfOrders;
     }
 
-    private int numberOfOrders;
+    private Long numberOfOrders;
 
 }

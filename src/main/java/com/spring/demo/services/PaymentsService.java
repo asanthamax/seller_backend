@@ -1,5 +1,6 @@
 package com.spring.demo.services;
 
+import com.spring.demo.entity.PaymentSeller;
 import com.spring.demo.entity.Payments;
 import com.spring.demo.errors.RequestNotFoundException;
 import com.spring.demo.model.request.PaymentsRequest;
@@ -13,10 +14,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class PaymentsService {
@@ -32,25 +32,10 @@ public class PaymentsService {
     public PaymentsResponse getAllPayables(Pageable pageable) throws DataAccessException{
 
         Page<Payments> allPayable = paymentsRepository.findPaymentsToPaid("Pending", pageable);
-        List<Long> userIds = new ArrayList<>();
+        Page<PaymentSeller> sellerPayment = paymentsRepository.findSellerPayments(pageable, "Pending");
         PaymentsResponse response = new PaymentsResponse();
         List<PendingPaymentResponse> paymentsResponses = new ArrayList<>();
-        for(Payments payable: allPayable){
-
-           if(!userIds.contains(payable.getSeller().getSellerID())){
-
-               PendingPaymentResponse singleResponse = new PendingPaymentResponse();
-               userIds.add(payable.getSeller().getSellerID());
-               singleResponse.setAmount(payable.getTotalAmount());
-               singleResponse.setNumberOfOrders(payable.getTotalOrders());
-               singleResponse.setSellerName(payable.getSeller().getUerID().getFirstName()+" "+payable.getSeller().getUerID().getLastName());
-               singleResponse.setUserID(payable.getSeller().getSellerID());
-               paymentsResponses.add(singleResponse);
-           }
-           response.setTotalAmount(payable.getTotalSumAmount());
-           response.setTotalPaid(payable.getTotalPaid());
-           response.setTotalPayable(payable.getTotalPayable());
-        }
+        paymentArrange(allPayable, response, paymentsResponses, sellerPayment, "Pending");
         response.setPendingPaymentResponses(paymentsResponses);
         return response;
     }
@@ -69,6 +54,53 @@ public class PaymentsService {
                 paymentsRepository.saveAll(pays);
             else
                 throw new RequestNotFoundException("Not found any payments records to given user id");
+        }
+    }
+
+    public PaymentsResponse getAllPaids(Pageable pageable) throws DataAccessException{
+
+        Page<Payments> allPayable = paymentsRepository.findPaymentsToPaid("Paid", pageable);
+        Page<PaymentSeller> sellerPaids = paymentsRepository.findSellerPayments(pageable, "Paid");
+        PaymentsResponse response = new PaymentsResponse();
+        List<PendingPaymentResponse> paymentsResponses = new ArrayList<>();
+        paymentArrange(allPayable, response, paymentsResponses, sellerPaids, "Paid");
+        response.setPendingPaymentResponses(paymentsResponses);
+        return response;
+    }
+
+    private void paymentArrange(Page<Payments> allPayable, PaymentsResponse response, List<PendingPaymentResponse> paymentsResponses, Page<PaymentSeller> sellerPayments,String paymentStatus) {
+
+
+        Optional<Payments> payments = allPayable.get().findFirst();
+        if (payments.isPresent()) {
+            Payments payable = payments.get();
+            response.setTotalAmount(payable.getTotalSumAmount());
+            response.setTotalPaid(payable.getTotalPaid());
+            response.setTotalPayable(payable.getTotalPayable());
+        }
+
+        for (PaymentSeller sellerPay: sellerPayments){
+
+            PendingPaymentResponse singleResponse = new PendingPaymentResponse();
+            singleResponse.setAmount(sellerPay.getAmount());
+            singleResponse.setNumberOfOrders(sellerPay.getNumOrders());
+            singleResponse.setSellerName(sellerPay.getUserID().getUerID().getFirstName()+" "+sellerPay.getUserID().getUerID().getLastName());
+            singleResponse.setUserID(sellerPay.getUserID().getSellerID());
+            paymentsResponses.add(singleResponse);
+        }
+    }
+
+    public void updatePaymentStatus() throws DataAccessException{
+
+        List<Payments> updateablePayments = paymentsRepository.getPendingPayments();
+        for (Payments pay: updateablePayments){
+
+            long milliSecondsDiff = pay.getRecievedDate().getTime() - new Date().getTime();
+            long dateDiff = TimeUnit.DAYS.convert(milliSecondsDiff, TimeUnit.MILLISECONDS);
+            if(dateDiff >= 30){
+
+                paymentsRepository.updatePaymentStatus(pay.getId());
+            }
         }
     }
 }

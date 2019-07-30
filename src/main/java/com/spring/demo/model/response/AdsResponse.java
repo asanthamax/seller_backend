@@ -8,7 +8,7 @@ public class AdsResponse {
 
     private Long id;
 
-    @JsonFormat(pattern = "yyyy-mm-dd H:i:s")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishedDate;
 
     private String adImage;
@@ -47,7 +47,7 @@ public class AdsResponse {
     }
 
     public AdsResponse(Long id, Date publishedDate, String adImage, int adStatus,
-                       Long adSlot, String customerName, String customerEmail) {
+                       Long adSlot, String customerName, String customerEmail, String addLocation) {
 
         this.id = id;
         this.publishedDate = new Date(publishedDate.getTime());
@@ -56,6 +56,15 @@ public class AdsResponse {
         this.adSlot = adSlot;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
+        this.addLocation = addLocation;
+    }
+
+    public String getAddLocation() {
+        return addLocation;
+    }
+
+    public void setAddLocation(String addLocation) {
+        this.addLocation = addLocation;
     }
 
     public Long getId() {
@@ -92,4 +101,6 @@ public class AdsResponse {
     }
 
     private int adStatus;
+
+    private String addLocation;
 }

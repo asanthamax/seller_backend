@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductsRepository extends PagingAndSortingRepository<Products, Long> {
 
-    @Query("SELECT products FROM Products products INNER JOIN products.tags AS tags")
+    @Query("SELECT products FROM Products products LEFT JOIN products.tags AS tags")
     Page<Products> findAll(Pageable pageable);
 }

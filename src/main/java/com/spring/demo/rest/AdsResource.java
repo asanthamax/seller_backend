@@ -2,6 +2,7 @@ package com.spring.demo.rest;
 
 import com.spring.demo.entity.AdSlots;
 import com.spring.demo.entity.Ads;
+import com.spring.demo.errors.RequestNotFoundException;
 import com.spring.demo.model.request.AdSaveRequest;
 import com.spring.demo.model.response.AdaddResponse;
 import com.spring.demo.model.response.AdsResponse;
@@ -52,15 +53,20 @@ public class AdsResource {
     @RequestMapping(path = "/{adId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasAuthority('ADS_READ')")
     @ApiOperation(value = "get single ad", notes = "get single ad details by ad id", nickname = "getSingleAd")
-    public ResponseEntity<AdsResponse> getSingleAd(@PathVariable Long adId){
+    public ResponseEntity<AdsResponse> getSingleAd(@PathVariable Long adId) throws RequestNotFoundException {
 
-        Optional<Ads> ads = adsService.getSingleAd(adId);
-        if(ads.isPresent()) {
-            AdsResponse adEntity = conversionService.convert(ads.get(), AdsResponse.class);
-            return new ResponseEntity<>(adEntity, HttpStatus.ACCEPTED);
-        }else{
+        try {
+            Optional<Ads> ads = adsService.getSingleAd(adId);
+            if (ads.isPresent()) {
+                AdsResponse adEntity = conversionService.convert(ads.get(), AdsResponse.class);
+                return new ResponseEntity<>(adEntity, HttpStatus.ACCEPTED);
+            } else {
 
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        }catch (Exception ex){
+
+            throw new RequestNotFoundException(ex.getMessage(), ex);
         }
     }
 

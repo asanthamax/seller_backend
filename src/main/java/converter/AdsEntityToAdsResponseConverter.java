@@ -4,7 +4,9 @@ import com.spring.demo.entity.Ads;
 import com.spring.demo.model.response.AdsResponse;
 import org.springframework.core.convert.converter.Converter;
 
-public class AdsEntityToAdsResponseConverter implements Converter<Ads, AdsResponse> {
+import java.util.Date;
+
+public class AdsEntityToAdsResponseConverter implements Converter<Ads, AdsResponse>{
 
     @Override
     public AdsResponse convert(Ads ads) {
@@ -12,11 +14,16 @@ public class AdsEntityToAdsResponseConverter implements Converter<Ads, AdsRespon
         AdsResponse response = new AdsResponse();
         response.setId(ads.getId());
         response.setAdImage(ads.getImgPath());
-        response.setPublishedDate(ads.getStart_at());
+        if (ads.getStart_at() != null) {
+            response.setPublishedDate(ads.getStart_at());
+        } else {
+            response.setPublishedDate(new Date());
+        }
         response.setAdStatus(ads.getStatus());
         response.setAdSlot(ads.getAdSlotId().getId());
+        response.setAddLocation(ads.getAdSlotId().getAddLocation());
         response.setCustomerEmail(ads.getUserId().getUser().getEmail());
-        response.setCustomerName(ads.getUserId().getUser().getFirstName()+" "+ads.getUserId().getUser().getLastName());
+        response.setCustomerName(ads.getUserId().getUser().getFirstName() + " " + ads.getUserId().getUser().getLastName());
         return response;
     }
 }

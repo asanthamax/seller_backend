@@ -1,6 +1,7 @@
 package com.spring.demo.rest;
 
 import com.spring.demo.errors.FileStorageException;
+import com.spring.demo.errors.RequestFileNotFoundException;
 import com.spring.demo.errors.RequestNotFoundException;
 import com.spring.demo.model.request.SliderRequest;
 import com.spring.demo.model.response.SliderResponse;
@@ -9,6 +10,7 @@ import com.spring.demo.services.SliderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +19,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -71,9 +75,11 @@ public class SliderResource {
 
         try {
             String imgURL = storageService.storeFile(file);
+            Resource sourceURL = storageService.loadFileAsResource(file.getOriginalFilename());
             SliderResponse sliderRequest = new SliderResponse();
             sliderRequest.setSliderTitle(sliderTitle);
-            sliderRequest.setSlideURL(imgURL);
+            sliderRequest.setSliderBasePath(imgURL);
+            sliderRequest.setSlideURL("http://localhost:8080/demo/images/"+sourceURL.getFilename());
             sliderRequest.setSliderOrder(sliderOrder);
             sliderRequest.setSliderID((long) 0);
             sliderService.saveSlider(sliderRequest);
@@ -81,7 +87,7 @@ public class SliderResource {
         }catch (DataAccessException ex){
 
             throw new RequestNotFoundException(ex.getMessage(), ex);
-        } catch (FileStorageException e) {
+        } catch (FileStorageException | RequestFileNotFoundException e) {
 
             throw new FileStorageException(e.getMessage(), e);
         }

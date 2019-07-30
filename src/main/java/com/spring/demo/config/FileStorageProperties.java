@@ -2,16 +2,16 @@ package com.spring.demo.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "file")
+@ConfigurationProperties(prefix = "storage")
 public class FileStorageProperties {
 
-    public String getUploadDir() {
-        return uploadDir;
+    public String getLocation() {
+        return location;
     }
 
-    public void setUploadDir(String uploadDir) {
-        this.uploadDir = uploadDir;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    private String uploadDir;
+    private String location;
 }
