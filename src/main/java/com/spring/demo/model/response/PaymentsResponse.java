@@ -1,19 +1,21 @@
 package com.spring.demo.model.response;
 
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public class PaymentsResponse {
 
-    private List<PendingPaymentResponse> pendingPaymentResponses;
+    private Page<PendingPaymentResponse> pendingPaymentResponses;
 
     private double totalAmount;
 
-    public List<PendingPaymentResponse> getPendingPaymentResponses() {
+    public Page<PendingPaymentResponse> getPendingPaymentResponses() {
         return pendingPaymentResponses;
     }
 
-    public PaymentsResponse(List<PendingPaymentResponse> pendingPaymentResponses, double totalAmount, double totalPaid, double payable) {
+    public PaymentsResponse(Page<PendingPaymentResponse> pendingPaymentResponses, double totalAmount, double totalPaid, double payable) {
         this.pendingPaymentResponses = pendingPaymentResponses;
         this.totalAmount = totalAmount;
         this.totalPaid = totalPaid;
@@ -23,7 +25,7 @@ public class PaymentsResponse {
     public PaymentsResponse() {
     }
 
-    public void setPendingPaymentResponses(List<PendingPaymentResponse> pendingPaymentResponses) {
+    public void setPendingPaymentResponses(Page<PendingPaymentResponse> pendingPaymentResponses) {
         this.pendingPaymentResponses = pendingPaymentResponses;
     }
 

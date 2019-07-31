@@ -23,6 +23,7 @@ public class ConversionConfig {
         converters.add(new ResetPasswordEntityToResetPasswordResponse());
         converters.add(new AdsEntityToAdsResponseConverter());
         converters.add(new AdSaveRequestToAdaddResponseConverter());
+        converters.add(new ObjectToPaymentSellerConverter());
         return converters;
     }
 

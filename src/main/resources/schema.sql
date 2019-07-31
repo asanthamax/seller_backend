@@ -127,5 +127,13 @@ ALTER TABLE `oauth_user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
+CREATE PROCEDURE `SellerPayments`()
+BEGIN
+SELECT SUM(amount) as amount,COUNT(*) as numOrders,userid
+FROM sellerpayments
+WHERE recieved_date >= DATE(ADDDATE(recieved_date, INTERVAL 30 DAY))
+GROUP BY userid;
+END
+
 
 

@@ -178,9 +178,9 @@ public class Payments {
     @Formula("(SELECT SUM(payments.amount) FROM sellerpayments payments)")
     private Double totalSumAmount;
 
-    @Formula("(SELECT SUM(payments.amount) FROM sellerpayments payments WHERE payments.payment_status = 'Pending')")
+    @Formula("(SELECT SUM(payments.amount) FROM sellerpayments payments WHERE payments.payment_status = 'pending' AND (DATEDIFF(CURDATE(), recieved_date) >= 30))")
     private Double totalPayable;
 
-    @Formula("(SELECT SUM(payments.amount) FROM sellerpayments payments WHERE payments.payment_status = 'Paid')")
+    @Formula("(SELECT SUM(payments.amount) FROM sellerpayments payments WHERE payments.payment_status = 'paid')")
     private Double totalPaid;
 }

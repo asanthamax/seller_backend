@@ -2,26 +2,29 @@ package com.spring.demo.entity;
 
 public class PaymentSeller {
 
-    private Seller userID;
+    private Long userID;
 
     private double amount;
 
     private Long numOrders;
 
-    public PaymentSeller(Seller userID, double amount, Long numOrders) {
+    public PaymentSeller(Long userID, double amount, Long numOrders) {
+
+        super();
         this.userID = userID;
         this.amount = amount;
         this.numOrders = numOrders;
     }
 
     public PaymentSeller() {
+        super();
     }
 
-    public Seller getUserID() {
+    public Long getUserID() {
         return userID;
     }
 
-    public void setUserID(Seller userID) {
+    public void setUserID(Long userID) {
         this.userID = userID;
     }
 
