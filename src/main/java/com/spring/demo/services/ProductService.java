@@ -12,8 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.swing.text.html.Option;
 import java.util.ArrayList;
@@ -32,19 +38,30 @@ public class ProductService {
 
     private final ProductVariationRepository productVariationRepository;
 
+    private final JavaMailSender mailSender;
+
+    private final MailContentBuilder mailContentBuilder;
+
 
     @Autowired
-    public ProductService(ProductsRepository prodRepository, ProductReviewsRepository reviewsRepository, ProductImagesRepository imagesRepository, ProductVariationRepository variationRepository){
+    public ProductService(ProductsRepository prodRepository, ProductReviewsRepository reviewsRepository, ProductImagesRepository imagesRepository, ProductVariationRepository variationRepository, JavaMailSender mailSender, MailContentBuilder mailContent){
 
         this.productsRepository = prodRepository;
         this.productReviewsRepository = reviewsRepository;
         this.productImagesRepository = imagesRepository;
         this.productVariationRepository = variationRepository;
+        this.mailSender = mailSender;
+        this.mailContentBuilder = mailContent;
     }
 
     public Page<ProductResponse> getAllProducts(Pageable pageable){
 
         Page<Products> products = productsRepository.findAll(pageable);
+        return getPageProducts(products, pageable);
+    }
+
+    public Page<ProductResponse> getPageProducts(Page<Products> products, Pageable pageable){
+
         List<ProductResponse> productResponses = new ArrayList<>();
         for(Products prod: products){
 
@@ -147,7 +164,7 @@ public class ProductService {
         return variationsAndImagesList;
     }
 
-    public boolean saveProduct(ProductResponse product){
+    public boolean saveProduct(ProductResponse product) throws MailException {
 
         Optional<Products> products = productsRepository.findById(product.getProductId());
         if(products.isPresent()){
@@ -155,6 +172,23 @@ public class ProductService {
             Products prodToSave = products.get();
             prodToSave.setIsActive(product.getIsActive());
             productsRepository.save(prodToSave);
+            MimeMessagePreparator messagePreparator = mimeMessage -> {
+
+                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+                messageHelper.setFrom("admin@seller.com");
+                messageHelper.setTo(product.getUser().getEmail());
+                String user_full = product.getUser().getFirstName()+" "+product.getUser().getLastName();
+                String content = "";
+                if(prodToSave.getIsActive()==1) {
+                    messageHelper.setSubject("Product is Approved");
+                    content = this.mailContentBuilder.build(user_full, "Your product has been successfully approved", "product_approve");
+                }else{
+                    messageHelper.setSubject("Product is Disapproved");
+                    content = this.mailContentBuilder.build(user_full, "Your product has been Disapproved", "product_disapprove");
+                }
+                messageHelper.setText(content, true);
+            };
+            this.mailSender.send(messagePreparator);
             return true;
         }else{
 

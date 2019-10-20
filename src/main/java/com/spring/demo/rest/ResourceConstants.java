@@ -10,4 +10,5 @@ public class ResourceConstants {
     public static final String SHIP_V1 = "/secured/shipping/v1";
     public static final String SLDR_V1 = "/secured/slider/v1";
     public static final String PAY_V1 = "/secured/payments/v1";
+    public static final String CUS_SELL_USERS_V1 = "/secured/sellcus/v1";
 }

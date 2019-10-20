@@ -14,11 +14,6 @@ public class Seller {
     @Column(name = "sellerID")
     private Long sellerID;
 
-    public Seller(String address, SystemUser uerID) {
-        this.address = address;
-        this.uerID = uerID;
-    }
-
     public Seller() {
     }
 
@@ -50,6 +45,48 @@ public class Seller {
 
     @Column(name = "address")
     private String address;
+
+    public Seller(String address, String city, String country, int postalCode, SystemUser uerID) {
+        this.address = address;
+        this.city = city;
+        this.country = country;
+        this.postalCode = postalCode;
+        this.uerID = uerID;
+    }
+
+    public String getCity() {
+
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public int getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(int postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "postal_code")
+    private int postalCode;
 
     @OneToOne
     @JoinColumn(name = "User_userID")

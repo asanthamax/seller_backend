@@ -260,7 +260,6 @@ public class Products {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-
     @JoinColumn(name = "Categories_categoryID")
     private ProductCategory category;
 

@@ -117,7 +117,8 @@ public class PaymentsService {
             Payments payable = payments.get();
             response.setTotalAmount((payable.getTotalSumAmount() != null) ? payable.getTotalSumAmount() : 0.0);
             response.setTotalPaid((payable.getTotalPaid() != null) ? payable.getTotalPaid() : 0.0);
-            response.setTotalPayable((payable.getTotalPayable() != null) ? payable.getTotalPayable() : 0.0);
+            double totalPayable = payable.getTotalSumAmount() - payable.getTotalPaid();
+            response.setTotalPayable(totalPayable);
         }
 
         for (PaymentSeller sellerPay: sellerPayments){

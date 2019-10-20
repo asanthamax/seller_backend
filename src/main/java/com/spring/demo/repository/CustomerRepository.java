@@ -14,4 +14,5 @@ public interface CustomerRepository extends PagingAndSortingRepository<Customer,
             "INNER JOIN FETCH customer.user " +
             "WHERE customer.id = :id")
     Optional<Customer> findById(Long id);
+
 }

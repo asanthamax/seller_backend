@@ -53,10 +53,15 @@ public class ProductResource {
     @RequestMapping(path = "/saveProduct", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasAuthority('READ_WRITE_PRODUCTS')")
     @ApiOperation(value = "save single product", notes = "save/update single product in database", nickname = "saveProduct")
-    public ResponseEntity saveProduct(@RequestBody  ProductResponse productResponse){
+    public ResponseEntity saveProduct(@RequestBody ProductResponse productResponse){
 
-        productService.saveProduct(productResponse);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            productService.saveProduct(productResponse);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch(RestServiceException ex){
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @RequestMapping(path = "/deleteProduct/{productId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

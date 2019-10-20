@@ -26,6 +26,7 @@ public class FileStorageService {
     @Autowired
     public FileStorageService(FileStorageProperties fileProperties) throws FileStorageException {
 
+       // System.out.println("File Location:"+fileProperties.getLocation());
         this.fileStorageLocation = Paths.get(fileProperties.getLocation()).toAbsolutePath().normalize();
         try{
 
